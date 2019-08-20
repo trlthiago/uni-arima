@@ -1,4 +1,5 @@
 ﻿using System;
+using uni_arima.infra;
 
 namespace uni_arima
 {
@@ -6,7 +7,7 @@ namespace uni_arima
     {
         static void Main(string[] args)
         {
-            var collector = new infra.Prometheus("localhost");
+            var collector = new Prometheus(new Settings());
             var metrics = collector.Collect();
             foreach (var metric in metrics)
             {

@@ -15,19 +15,23 @@ namespace uni_arima.infra
 
     public class Prometheus : IMetricCollector
     {
-        private string _prometheusServer;
-        public Prometheus(string prometheusServer)
+        private readonly Settings _settings;
+        public Prometheus(Settings settings)
         {
-            _prometheusServer = prometheusServer;
-
+            _settings = settings;
         }
 
-        private string Get(string instance, string query, long start, long end)
+        private string Get(string query)
         {
             HttpClient client = new HttpClient();
-            client.BaseAddress = new System.Uri($"http://{_prometheusServer}:9090");
-            var response = client.GetAsync($"api/v1/query_range?query=100%20-%20avg%20(irate(wmi_cpu_time_total%7Binstance%3D%22{instance}%22%2Cmode%3D%22idle%22%7D%5B60s%5D))%20*%20100&start={start}&end={end}&step=15").Result;
+            client.BaseAddress = new System.Uri($"http://{_settings.Prometheus}");
+            var response = client.GetAsync(query).Result;
             return response.Content.ReadAsStringAsync().Result;
+        }
+
+        private string GetCpuMetric(long start, long end)
+        {
+            return Get($"api/v1/query_range?query=100%20-%20avg%20(irate({_settings.Metric}%7Binstance%3D%22{_settings.Instance}%22%2Cmode%3D%22idle%22%7D%5B60s%5D))%20*%20100&start={start}&end={end}&step=15");
         }
 
         public static DateTime FromUnixTime(long unixTime)
@@ -58,12 +62,13 @@ namespace uni_arima.infra
             }
             return metrics;
         }
+
         public List<CpuMetric> Collect()
         {
             var start = ToUnixTime(DateTime.UtcNow.AddMinutes(-15));
             var end = ToUnixTime(DateTime.UtcNow);
-            var response = Get("ubapp01", "", start, end);
-            return ParseCpuMetrics(response); ;
+            var response = GetCpuMetric(start, end);
+            return ParseCpuMetrics(response);
         }
     }
 }
