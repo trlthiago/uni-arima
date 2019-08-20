@@ -4,9 +4,9 @@ using System.Linq;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using uni_arima.Model;
+using uni_elastic_manager.Model;
 
-namespace uni_arima.infra
+namespace uni_elastic_manager.infra
 {
     public interface IMetricCollector
     {

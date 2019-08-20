@@ -6,12 +6,12 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v2.2": {
-      "uni-arima/1.0.0": {
+      "uni-elastic-manager/1.0.0": {
         "dependencies": {
           "Newtonsoft.Json": "12.0.3-beta1"
         },
         "runtime": {
-          "uni-arima.dll": {}
+          "uni-elastic-manager.dll": {}
         }
       },
       "Newtonsoft.Json/12.0.3-beta1": {
@@ -25,7 +25,7 @@
     }
   },
   "libraries": {
-    "uni-arima/1.0.0": {
+    "uni-elastic-manager/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

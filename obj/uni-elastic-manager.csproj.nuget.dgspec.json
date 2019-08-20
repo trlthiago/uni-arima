@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\PROJECTS\\uni-arima\\uni-arima.csproj": {}
+    "C:\\PROJECTS\\uni-elastic-manager\\uni-elastic-manager.csproj": {}
   },
   "projects": {
-    "C:\\PROJECTS\\uni-arima\\uni-arima.csproj": {
+    "C:\\PROJECTS\\uni-elastic-manager\\uni-elastic-manager.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\PROJECTS\\uni-arima\\uni-arima.csproj",
-        "projectName": "uni-arima",
-        "projectPath": "C:\\PROJECTS\\uni-arima\\uni-arima.csproj",
+        "projectUniqueName": "C:\\PROJECTS\\uni-elastic-manager\\uni-elastic-manager.csproj",
+        "projectName": "uni-elastic-manager",
+        "projectPath": "C:\\PROJECTS\\uni-elastic-manager\\uni-elastic-manager.csproj",
         "packagesPath": "C:\\Users\\thiago\\.nuget\\packages\\",
-        "outputPath": "C:\\PROJECTS\\uni-arima\\obj\\",
+        "outputPath": "C:\\PROJECTS\\uni-elastic-manager\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

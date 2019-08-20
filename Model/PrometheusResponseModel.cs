@@ -1,7 +1,7 @@
 using System;
-using uni_arima.infra;
+using uni_elastic_manager.infra;
 
-namespace uni_arima.Model
+namespace uni_elastic_manager.Model
 {
     public class CpuMetric
     {

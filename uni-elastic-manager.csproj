@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <RootNamespace>uni_arima</RootNamespace>
+    <RootNamespace>uni_elastic_manager</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,6 +1,6 @@
 using System;
 
-namespace uni_arima
+namespace uni_elastic_manager
 {
     public class Settings
     {
