@@ -6,15 +6,10 @@ using uni_elastic_manager.Model;
 
 namespace uni_elastic_manager.infra
 {
-    public interface IMetricCollector
-    {
-        List<CpuMetric> Collect();
-    }
-
-    public class Prometheus : IMetricCollector
+    public class PrometheusCollector : IMetricCollector
     {
         private readonly Settings _settings;
-        public Prometheus(Settings settings)
+        public PrometheusCollector(Settings settings)
         {
             _settings = settings;
         }

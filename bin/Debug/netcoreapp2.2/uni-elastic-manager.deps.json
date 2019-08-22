@@ -1,17 +1,43 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.2",
-    "signature": "884f49f110c8d637715bef93b34f290712ecd7fe"
+    "signature": "cd4307ac21d00299829fb100c57b9ac3ada89c3a"
   },
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v2.2": {
       "uni-elastic-manager/1.0.0": {
         "dependencies": {
-          "Newtonsoft.Json": "12.0.3-beta1"
+          "Newtonsoft.Json": "12.0.3-beta1",
+          "R.NET": "1.8.2"
         },
         "runtime": {
           "uni-elastic-manager.dll": {}
+        }
+      },
+      "DynamicInterop/0.9.1": {
+        "runtime": {
+          "lib/netstandard2.0/DynamicInterop.dll": {
+            "assemblyVersion": "0.9.0.0",
+            "fileVersion": "0.9.0.0"
+          }
+        }
+      },
+      "Microsoft.CSharp/4.5.0": {},
+      "Microsoft.Win32.Registry/4.5.0": {
+        "dependencies": {
+          "System.Security.AccessControl": "4.5.0",
+          "System.Security.Principal.Windows": "4.5.0"
+        },
+        "runtimeTargets": {
+          "runtime/unix/lib/_._": {
+            "rid": "unix",
+            "assetType": "runtime"
+          },
+          "runtime/win/lib/_._": {
+            "rid": "win",
+            "assetType": "runtime"
+          }
         }
       },
       "Newtonsoft.Json/12.0.3-beta1": {
@@ -19,6 +45,42 @@
           "lib/netstandard2.0/Newtonsoft.Json.dll": {
             "assemblyVersion": "12.0.0.0",
             "fileVersion": "12.0.3.23619"
+          }
+        }
+      },
+      "R.NET/1.8.2": {
+        "dependencies": {
+          "DynamicInterop": "0.9.1",
+          "Microsoft.CSharp": "4.5.0",
+          "Microsoft.Win32.Registry": "4.5.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/RDotNet.dll": {
+            "assemblyVersion": "1.8.2.0",
+            "fileVersion": "1.8.2.0"
+          }
+        }
+      },
+      "System.Security.AccessControl/4.5.0": {
+        "dependencies": {
+          "System.Security.Principal.Windows": "4.5.0"
+        },
+        "runtimeTargets": {
+          "runtime/win/lib/_._": {
+            "rid": "win",
+            "assetType": "runtime"
+          }
+        }
+      },
+      "System.Security.Principal.Windows/4.5.0": {
+        "runtimeTargets": {
+          "runtime/unix/lib/_._": {
+            "rid": "unix",
+            "assetType": "runtime"
+          },
+          "runtime/win/lib/_._": {
+            "rid": "win",
+            "assetType": "runtime"
           }
         }
       }
@@ -30,12 +92,54 @@
       "serviceable": false,
       "sha512": ""
     },
+    "DynamicInterop/0.9.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-n21+Hd+tceX8lgaOosPV+Pne+YqnZUd5RLW3OhnsVxWRzYXiAIAKmKweHIePYeY+fmcn3N5tjkJyQUccFuL3bg==",
+      "path": "dynamicinterop/0.9.1",
+      "hashPath": "dynamicinterop.0.9.1.nupkg.sha512"
+    },
+    "Microsoft.CSharp/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kaj6Wb4qoMuH3HySFJhxwQfe8R/sJsNJnANrvv8WdFPMoNbKY5htfNscv+LHCu5ipz+49m2e+WQXpLXr9XYemQ==",
+      "path": "microsoft.csharp/4.5.0",
+      "hashPath": "microsoft.csharp.4.5.0.nupkg.sha512"
+    },
+    "Microsoft.Win32.Registry/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+FWlwd//+Tt56316p00hVePBCouXyEzT86Jb3+AuRotTND0IYn0OO3obs1gnQEs/txEnt+rF2JBGLItTG+Be6A==",
+      "path": "microsoft.win32.registry/4.5.0",
+      "hashPath": "microsoft.win32.registry.4.5.0.nupkg.sha512"
+    },
     "Newtonsoft.Json/12.0.3-beta1": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-dvGx3CT9tEs9LbgyIw9MZl+sLCFa6yx1NXLKaldRk+N9BgToJpCK2PUv8z2aNbLq6ljtLS93X5gamWxs8DhdRA==",
       "path": "newtonsoft.json/12.0.3-beta1",
       "hashPath": "newtonsoft.json.12.0.3-beta1.nupkg.sha512"
+    },
+    "R.NET/1.8.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-WXIs0r+WS8IrqIOBg4KoVTC5A/fIMySaZM5OotoE0BCb2RI+CQcR6FFDsDXqNy6+7cx4uLp7NX6mt5SGFyAKRg==",
+      "path": "r.net/1.8.2",
+      "hashPath": "r.net.1.8.2.nupkg.sha512"
+    },
+    "System.Security.AccessControl/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-vW8Eoq0TMyz5vAG/6ce483x/CP83fgm4SJe5P8Tb1tZaobcvPrbMEL7rhH1DRdrYbbb6F0vq3OlzmK0Pkwks5A==",
+      "path": "system.security.accesscontrol/4.5.0",
+      "hashPath": "system.security.accesscontrol.4.5.0.nupkg.sha512"
+    },
+    "System.Security.Principal.Windows/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-U77HfRXlZlOeIXd//Yoj6Jnk8AXlbeisf1oq1os+hxOGVnuG+lGSfGqTwTZBoORFF6j/0q7HXIl8cqwQ9aUGqQ==",
+      "path": "system.security.principal.windows/4.5.0",
+      "hashPath": "system.security.principal.windows.4.5.0.nupkg.sha512"
     }
   }
 }

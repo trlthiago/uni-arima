@@ -6,7 +6,7 @@ namespace uni_elastic_manager.Model
     public class CpuMetric
     {
         public long Time { get; set; }
-        public DateTime DateTime { get { return Prometheus.FromUnixTime(Time); } }
+        public DateTime DateTime { get { return PrometheusCollector.FromUnixTime(Time); } }
         public string Value { get; set; }
     }
 }
