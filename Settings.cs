@@ -8,5 +8,6 @@ namespace uni_elastic_manager
         public string Instance => Environment.GetEnvironmentVariable("Instance");
         public string Metric => Environment.GetEnvironmentVariable("Metric");
         public string OS => Environment.GetEnvironmentVariable("OS");
+        public string Name => Environment.GetEnvironmentVariable("Name");
     }
 }

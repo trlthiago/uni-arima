@@ -34,8 +34,9 @@
             "env": {
                 "Prometheus": "localhost:9090",
                 "Metric": "dockerstats_cpu_usage_ratio",
-                "Instance": "ubapp01",
-                "OS": "linux"
+                "Instance": "prometheus",
+                "OS": "linux",
+                "Name": "newtoncotes.*"
             }
         },
         {
