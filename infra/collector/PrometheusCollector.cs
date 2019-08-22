@@ -6,15 +6,15 @@ using uni_elastic_manager.Model;
 
 namespace uni_elastic_manager.infra
 {
-    public class PrometheusCollector : IMetricCollector
+    public abstract class PrometheusCollector : IMetricCollector
     {
-        private readonly Settings _settings;
+        protected readonly Settings _settings;
         public PrometheusCollector(Settings settings)
         {
             _settings = settings;
         }
 
-        private string Get(string query)
+        protected string Get(string query)
         {
             HttpClient client = new HttpClient();
             client.BaseAddress = new System.Uri($"http://{_settings.Prometheus}");
@@ -22,11 +22,8 @@ namespace uni_elastic_manager.infra
             return response.Content.ReadAsStringAsync().Result;
         }
 
-        private string GetCpuMetric(long start, long end)
-        {
-            return Get($"api/v1/query_range?query=100%20-%20avg%20(irate({_settings.Metric}%7Binstance%3D%22{_settings.Instance}%22%2Cmode%3D%22idle%22%7D%5B60s%5D))%20*%20100&start={start}&end={end}&step=15");
-        }
-
+        protected abstract string GetCpuMetric(long start, long end);
+  
         public static DateTime FromUnixTime(long unixTime)
         {
             var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -50,8 +47,7 @@ namespace uni_elastic_manager.infra
                     Time = long.Parse(item[0].ToString()),
                     Value = item[1].ToString()
                 };
-                metrics.Add(metric)
-            ;
+                metrics.Add(metric);
             }
             return metrics;
         }
@@ -62,6 +58,41 @@ namespace uni_elastic_manager.infra
             var end = ToUnixTime(DateTime.UtcNow);
             var response = GetCpuMetric(start, end);
             return ParseCpuMetrics(response);
+        }
+    }
+
+    public class PrometheusWindowsCollector : PrometheusCollector
+    {
+        public PrometheusWindowsCollector(Settings settings) : base(settings)
+        {
+        }
+
+        protected override string GetCpuMetric(long start, long end)
+        {
+            return Get($"api/v1/query_range?query=100%20-%20avg%20(irate(wmi_cpu_time_total%7Binstance%3D%22{_settings.Instance}%22%2Cmode%3D%22idle%22%7D%5B60s%5D))%20*%20100&start={start}&end={end}&step=15");
+        }
+
+    }
+
+    public class PrometheusLinuxCollector : PrometheusCollector
+    {
+        public PrometheusLinuxCollector(Settings settings) : base(settings)
+        {
+
+        }
+
+        protected override string GetCpuMetric(long start, long end)
+        {
+            return Get($"api/v1/query_range?query=100%20-%20avg%20(irate(dockerstats_cpu_usage_ratio%7Binstance%3D%22{_settings.Instance}%22%2Cmode%3D%22idle%22%7D%5B60s%5D))%20*%20100&start={start}&end={end}&step=15");
+        }
+    }
+
+    public static class PrometheusFactory
+    {
+        public static PrometheusCollector GetInstance(Settings settings)
+        {
+            if (settings.OS == "windows") return new PrometheusWindowsCollector(settings);
+            return new PrometheusLinuxCollector(settings);
         }
     }
 }

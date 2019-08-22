@@ -10,7 +10,7 @@ namespace uni_elastic_manager
     {
         static void Main(string[] args)
         {
-            var collector = new PrometheusCollector(new Settings());
+            var collector = PrometheusFactory.GetInstance(new Settings());
             var metrics = collector.Collect();
             PrintMetrics(metrics);
 

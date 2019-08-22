@@ -23,7 +23,7 @@ namespace uni_elastic_manager.Infra
 
         public double Calculate(string[] metrics)
         {
-            var start = DateTime.Now.Ticks;
+            var start = DateTime.UtcNow.Ticks;
             var vector = re.CreateNumericVector(metrics.Select(x => double.Parse(x.Replace(".", ","))).ToList());
             re.SetSymbol("y", vector);
             re.Evaluate($"fit=arima(y, c({_q},{_d},{_p}))");

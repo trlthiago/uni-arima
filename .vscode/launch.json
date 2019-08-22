@@ -17,7 +17,8 @@
             "env": {
                 "Prometheus": "177.55.119.91:9090",
                 "Metric": "wmi_cpu_time_total",
-                "Instance": "ubapp01"
+                "Instance": "ubapp01",
+                "OS": "windows"
             }
         },
         {
@@ -33,7 +34,8 @@
             "env": {
                 "Prometheus": "localhost:9090",
                 "Metric": "dockerstats_cpu_usage_ratio",
-                "Instance": "ubapp01"
+                "Instance": "ubapp01",
+                "OS": "linux"
             }
         },
         {
