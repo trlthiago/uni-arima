@@ -12,7 +12,7 @@ namespace uni_elastic_manager.Infra
             _p = p;
         }
 
-        public int Calculate(string[] metrics)
+        public double Calculate(string[] metrics)
         {
             throw new System.NotImplementedException();
         }

@@ -15,7 +15,7 @@ namespace uni_elastic_manager
             PrintMetrics(metrics);
 
             var analyzer = new ArimaWithRBinary(2, 2, 2);
-            analyzer.Calculate(metrics.Select(x => x.Value).ToArray());
+            Console.WriteLine(analyzer.Calculate(metrics.Select(x => x.Value).ToArray()));
         }
 
         static void PrintMetrics(List<Model.CpuMetric> metrics)
