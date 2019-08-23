@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using Docker.DotNet;
-using Docker.DotNet.Models;
 using uni_elastic_manager;
 
 namespace uni_arima.infra.runnable
@@ -18,9 +16,7 @@ namespace uni_arima.infra.runnable
             _settings = settings;
             _CPUThresholdUpper = Convert.ToDouble(_settings.CPUThresholdUpper);
             _CPUThresholdLower = Convert.ToDouble(_settings.CPUThresholdLower);
-            client = new DockerClientConfiguration(
-           new Uri("http://localhost:4243"))
-           .CreateClient();
+            client = new DockerClientConfiguration(new Uri("http://localhost:4243")).CreateClient();
         }
         public bool Evaluate(double value)
         {

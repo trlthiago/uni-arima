@@ -1,0 +1,4 @@
+errorsLog.log
+metrics-ahead.log
+bin/*
+obj/*
