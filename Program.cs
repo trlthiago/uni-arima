@@ -13,12 +13,6 @@ namespace uni_elastic_manager
         static void Main(string[] args)
         {
             var logger = ConfigureLog();
-
-            /* EXEMPLO DE USO DO LOGGER */
-            logger.Error("TRL_ERROR");
-            logger.Info("3.333");
-            /* FIM DO EXEMPLO */
-
             var settings = new Settings();
             var collector = PrometheusFactory.GetInstance(settings);
             var evaluator = RunnableFactory.GetInstance(settings);
@@ -27,6 +21,7 @@ namespace uni_elastic_manager
             while (true)
             {
                 var metrics = collector.Collect();
+                logger.Info(metrics);
                 evaluator.Evaluate(analyzer.Calculate(metrics.Select(x => x.Value).ToArray()));
                 System.Threading.Thread.Sleep(15000);
             }

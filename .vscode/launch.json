@@ -41,7 +41,8 @@
                 "Name": "newtoncotes.*",
                 "CPUThresholdUpper": "80",
                 "CPUThresholdLower": "20",
-                "Runnable": "Docker"
+                "Runnable": "Docker",
+                "SocketDocker": "tcp://127.0.0.1:2375"
             }
         },
         {
