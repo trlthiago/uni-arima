@@ -38,9 +38,9 @@
                 "Metric": "dockerstats_cpu_usage_ratio",
                 "Instance": "prometheus",
                 "OS": "linux",
-                "Name": "newtoncotes.*",
-                "CPUThresholdUpper": "80",
-                "CPUThresholdLower": "20",
+                "Name": "python-app.*",
+                "CPUThresholdUpper": "0",
+                "CPUThresholdLower": "0",
                 "Runnable": "Docker",
                 "SocketDocker": "tcp://127.0.0.1:2375",
                 "Image": "igornardin/newtonpython:v1.0"

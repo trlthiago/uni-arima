@@ -20,16 +20,15 @@ namespace uni_arima.infra.runnable
 
         public async void AddResource()
         {
-            var containers = await _client.Containers.ListContainersAsync(
-                new ContainersListParameters()
+            var response = await _client.Containers.CreateContainerAsync(
+                new CreateContainerParameters()
                 {
-                    Limit = 10,
-                });
-            foreach (var container in containers)
-            {
-                Console.WriteLine($"Container ID: {container.ID}");
-            }
+                    Image = "igornardin/newtonpython:v1.0",
+                }
+            );
 
+
+            
 
         }
 
