@@ -2,7 +2,7 @@ using System;
 using RDotNet;
 using System.Linq;
 
-namespace uni_elastic_manager.Infra
+namespace uni_elastic_manager.infra
 {
     public class ArimaWithRBinary : IArima
     {

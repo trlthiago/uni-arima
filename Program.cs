@@ -3,9 +3,8 @@ using log4net.Config;
 using System.Linq;
 using System.Reflection;
 using uni_arima.infra.evaluator;
-using uni_arima.infra.runnable;
 using uni_elastic_manager.infra;
-using uni_elastic_manager.Infra;
+using uni_elastic_manager.infra.runnable;
 
 namespace uni_elastic_manager
 {
@@ -19,19 +18,20 @@ namespace uni_elastic_manager
             var evaluator = new Evaluator(settings);
             var runner = RunnableFactory.GetInstance(settings);
             var analyzer = new ArimaWithRBinary(2, 2, 2);
+
             while (true)
             {
                 var metrics = collector.Collect();
+
                 logger.Info(metrics);
+
                 EvaluatorAction eval = evaluator.Evaluate(analyzer.Calculate(metrics.Select(x => x.Value).ToArray()));
+
                 if (eval == EvaluatorAction.AddResource)
-                {
                     runner.AddResource();
-                }
                 else if (eval == EvaluatorAction.RemoveResource)
-                {
                     runner.RemoveResource();
-                }
+
                 System.Threading.Thread.Sleep(15000);
             }
         }

@@ -1,7 +1,7 @@
 using System;
 using uni_elastic_manager;
 
-namespace uni_arima.infra.runnable
+namespace uni_elastic_manager.infra.runnable
 {
     public class RunnableVM : IRunnable
     {

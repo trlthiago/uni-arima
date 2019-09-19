@@ -1,4 +1,4 @@
-namespace uni_elastic_manager.Infra
+namespace uni_elastic_manager.infra
 {
     public class ArimaWithRApi : IArima
     {

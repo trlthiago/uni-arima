@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Docker.DotNet;
 using Docker.DotNet.Models;
-using uni_elastic_manager;
 
-namespace uni_arima.infra.runnable
+namespace uni_elastic_manager.infra.runnable
 {
     public class RunnableDocker : IRunnable
     {
@@ -20,42 +18,38 @@ namespace uni_arima.infra.runnable
 
         public async void AddResource()
         {
-            var response = await _client.Containers.CreateContainerAsync(
+            var response = await _client.Containers.CreateContainerAsync
+            (
                 new CreateContainerParameters()
                 {
-                    Image = "igornardin/newtonpython:v1.0",
+                    Image = "igornardin/newtonpython:v1.0"
                 }
             );
-
-
-            
-
+            await _client.Containers.StartContainerAsync(response.ID, new ContainerStartParameters());
+            Console.WriteLine($"Iniciado o container ID {response.ID}");
         }
 
         public async void RemoveResource()
         {
-            var nodes = await _client.Swarm.ListNodesAsync();
-            foreach (var node in nodes)
-            {
-                Console.WriteLine($"Node ID: {node.ID} Node State: {node.Status.State}");
-            }
             var containers = await _client.Containers.ListContainersAsync(
                 new ContainersListParameters()
                 {
                     Filters = new Dictionary<string, IDictionary<string, bool>>
+                    {
                         {
-                            {"status", new Dictionary<string, bool>
-                                {
-                                    {"running", true}
-                                }
-                            }
+                            "status", new Dictionary<string, bool> { {"running", true} }
                         }
-                });
+                    }
+                }
+            );
             foreach (var container in containers)
             {
                 if (container.Image == _settings.Image)
                 {
-                    Console.WriteLine($"Container ID: {container.ID} Container Image: {container.Image} Container state:{container.State}");
+                    await _client.Containers.StopContainerAsync(container.ID, new ContainerStopParameters());
+                    await _client.Containers.RemoveContainerAsync(container.ID, new ContainerRemoveParameters());
+                    Console.WriteLine($"Removido o container ID {container.ID}");
+                    break;
                 }
             }
         }

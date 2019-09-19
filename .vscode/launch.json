@@ -20,7 +20,8 @@
                 "Instance": "ubapp01",
                 "OS": "windows",
                 "CPUThresholdUpper": "80",
-                "CPUThresholdLower": "20"
+                "CPUThresholdLower": "20",
+                "IsFake": "true",                
             }
         },
         {
@@ -43,7 +44,8 @@
                 "CPUThresholdLower": "0",
                 "Runnable": "Docker",
                 "SocketDocker": "tcp://127.0.0.1:2375",
-                "Image": "igornardin/newtonpython:v1.0"
+                "Image": "igornardin/newtonpython:v1.0",
+                "IsFake": "true",
             }
         },
         {
