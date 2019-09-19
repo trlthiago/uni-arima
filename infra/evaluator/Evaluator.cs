@@ -24,15 +24,14 @@ namespace uni_arima.infra.evaluator
         {
             if (value > _CPUThresholdUpper)
             {
-
                 return EvaluatorAction.AddResource;
             }
             else if (value < _CPUThresholdLower)
             {
                 return EvaluatorAction.RemoveResource;
             }
+
             return EvaluatorAction.Nothing;
         }
-
     }
 }

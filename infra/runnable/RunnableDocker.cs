@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Docker.DotNet;
 using Docker.DotNet.Models;
-using uni_elastic_manager;
 
-namespace uni_arima.infra.runnable
+namespace uni_elastic_manager.infra.runnable
 {
     public class RunnableDocker : IRunnable
     {
@@ -20,38 +18,35 @@ namespace uni_arima.infra.runnable
 
         public async void AddResource()
         {
-            var containers = await _client.Containers.ListContainersAsync(
-                new ContainersListParameters()
-                {
-                    Limit = 10,
-                });
+            var containers = await _client.Containers.ListContainersAsync(new ContainersListParameters { Limit = 10, });
+
             foreach (var container in containers)
             {
                 Console.WriteLine($"Container ID: {container.ID}");
             }
-
-
         }
 
         public async void RemoveResource()
         {
             var nodes = await _client.Swarm.ListNodesAsync();
+
             foreach (var node in nodes)
             {
                 Console.WriteLine($"Node ID: {node.ID} Node State: {node.Status.State}");
             }
-            var containers = await _client.Containers.ListContainersAsync(
-                new ContainersListParameters()
+
+            var parameters = new ContainersListParameters()
+            {
+                Filters = new Dictionary<string, IDictionary<string, bool>>
                 {
-                    Filters = new Dictionary<string, IDictionary<string, bool>>
-                        {
-                            {"status", new Dictionary<string, bool>
-                                {
-                                    {"running", true}
-                                }
-                            }
-                        }
-                });
+                    {
+                        "status", new Dictionary<string, bool> { {"running", true} }
+                    }
+                }
+            };
+
+            var containers = await _client.Containers.ListContainersAsync(parameters);
+
             foreach (var container in containers)
             {
                 if (container.Image == _settings.Image)

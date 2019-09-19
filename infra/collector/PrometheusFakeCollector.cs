@@ -1,7 +1,7 @@
 using uni_elastic_manager;
 using uni_elastic_manager.infra;
 
-namespace uni_arima.infra.collector
+namespace uni_elastic_manager.infra
 {
     
     public class PrometheusFakeCollector : PrometheusCollector

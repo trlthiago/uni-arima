@@ -1,4 +1,4 @@
-namespace uni_arima.infra.runnable
+namespace uni_elastic_manager.infra.runnable
 {
     public interface IRunnable
     {
