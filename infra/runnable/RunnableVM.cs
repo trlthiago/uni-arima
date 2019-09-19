@@ -15,17 +15,13 @@ namespace uni_arima.infra.runnable
             _CPUThresholdUpper = Convert.ToDouble(_settings.CPUThresholdUpper);
             _CPUThresholdLower = Convert.ToDouble(_settings.CPUThresholdLower);
         }
-        public bool Evaluate(double value)
-        {
-            throw new System.NotImplementedException();
-        }
 
-        protected static void AddContainer()
+        public void AddResource()
         {
              throw new System.NotImplementedException();
         }
 
-        protected static void RemoveContainer()
+        public void RemoveResource()
         {
             throw new System.NotImplementedException();
         }
