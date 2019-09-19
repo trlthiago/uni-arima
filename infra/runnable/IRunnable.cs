@@ -2,6 +2,7 @@ namespace uni_arima.infra.runnable
 {
     public interface IRunnable
     {
-         bool Evaluate(double value);
+         void AddResource();
+         void RemoveResource();
     }
 }

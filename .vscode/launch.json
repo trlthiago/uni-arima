@@ -42,7 +42,8 @@
                 "CPUThresholdUpper": "80",
                 "CPUThresholdLower": "20",
                 "Runnable": "Docker",
-                "SocketDocker": "tcp://127.0.0.1:2375"
+                "SocketDocker": "tcp://127.0.0.1:2375",
+                "Image": "igornardin/newtonpython:v1.0"
             }
         },
         {

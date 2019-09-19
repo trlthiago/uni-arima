@@ -13,5 +13,6 @@ namespace uni_elastic_manager
         public string CPUThresholdLower => Environment.GetEnvironmentVariable("CPUThresholdLower");
         public string Runnable => Environment.GetEnvironmentVariable("Runnable");
         public string SocketDocker => Environment.GetEnvironmentVariable("SocketDocker");
+        public string Image => Environment.GetEnvironmentVariable("Image");
     }
 }
