@@ -23,7 +23,7 @@ namespace uni_elastic_manager.infra
         }
 
         protected abstract string GetCpuMetric(long start, long end);
-  
+
         public static DateTime FromUnixTime(long unixTime)
         {
             var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -52,7 +52,7 @@ namespace uni_elastic_manager.infra
             return metrics;
         }
 
-        public List<CpuMetric> Collect()
+        public virtual List<CpuMetric> Collect()
         {
             var start = ToUnixTime(DateTime.UtcNow.AddMinutes(-15));
             var end = ToUnixTime(DateTime.UtcNow);

@@ -24,7 +24,11 @@ namespace uni_elastic_manager.infra
         public double Calculate(string[] metrics)
         {
             var start = DateTime.UtcNow.Ticks;
-            var vector = re.CreateNumericVector(metrics.Select(x => double.Parse(x.Replace(".", ","))).ToList());
+           
+            // var vector = re.CreateNumericVector(metrics.Select(x => double.Parse(x.Replace(".", ","))).ToList());
+
+            var vector = re.CreateNumericVector(metrics.Select(x => double.Parse(x,System.Globalization.CultureInfo.CurrentCulture)).ToList());
+            
             re.SetSymbol("y", vector);
             re.Evaluate($"fit=arima(y, c({_q},{_d},{_p}))");
             var resp = re.Evaluate($"f <- forecast(fit, h={forecast})");
