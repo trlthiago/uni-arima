@@ -4,5 +4,6 @@ namespace uni_elastic_manager.infra.runnable
     {
          void AddResource();
          void RemoveResource();
+         void InitializeRunnable();
     }
 }

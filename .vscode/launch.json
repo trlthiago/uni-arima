@@ -40,12 +40,12 @@
                 "Instance": "prometheus",
                 "OS": "linux",
                 "Name": "python-app.*",
-                "CPUThresholdUpper": "0",
-                "CPUThresholdLower": "0",
+                "CPUThresholdUpper": "80",
+                "CPUThresholdLower": "80",
                 "Runnable": "Docker",
                 "SocketDocker": "tcp://127.0.0.1:2375",
                 "Image": "igornardin/newtonpython:v1.0",
-                "IsFake": "true",
+                "IsFake": "false",
             }
         },
         {

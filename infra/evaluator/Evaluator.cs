@@ -22,6 +22,9 @@ namespace uni_arima.infra.evaluator
 
         public EvaluatorAction Evaluate(double value)
         {
+            if (value == 0)
+                return EvaluatorAction.Nothing;
+                
             if (value > _CPUThresholdUpper)
             {
                 return EvaluatorAction.AddResource;

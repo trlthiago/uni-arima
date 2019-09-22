@@ -15,6 +15,9 @@ namespace uni_elastic_manager.infra.runnable
             _CPUThresholdUpper = Convert.ToDouble(_settings.CPUThresholdUpper);
             _CPUThresholdLower = Convert.ToDouble(_settings.CPUThresholdLower);
         }
+        public void InitializeRunnable(){
+            
+        }
 
         public void AddResource()
         {

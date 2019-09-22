@@ -9,6 +9,8 @@ namespace uni_elastic_manager.infra.runnable
     {
         protected readonly Settings _settings;
         private readonly DockerClient _client;
+        private ulong replicas;
+        private string IDService;
 
         public RunnableDocker(Settings settings)
         {
@@ -16,42 +18,119 @@ namespace uni_elastic_manager.infra.runnable
             _client = new DockerClientConfiguration(new Uri(_settings.SocketDocker)).CreateClient();
         }
 
-        public async void AddResource()
+        public async void InitializeRunnable()
         {
-            var response = await _client.Containers.CreateContainerAsync
-            (
-                new CreateContainerParameters()
-                {
-                    Image = "igornardin/newtonpython:v1.0"
-                }
-            );
-            await _client.Containers.StartContainerAsync(response.ID, new ContainerStartParameters());
-            Console.WriteLine($"Iniciado o container ID {response.ID}");
+            replicas = 2;
+            AddNode();
+            var response = await _client.Swarm.CreateServiceAsync(new ServiceCreateParameters()
+            {
+                Service = ReturnParametersService()
+            });
+            IDService = response.ID;
         }
 
-        public async void RemoveResource()
+        public void AddResource()
         {
-            var containers = await _client.Containers.ListContainersAsync(
-                new ContainersListParameters()
+            replicas++;
+            UpdateService();
+            Console.WriteLine("Adicionada uma replica!");
+        }
+
+        public void RemoveResource()
+        {
+            if (replicas == 1)
+                return;
+            replicas--;
+            UpdateService();
+            Console.WriteLine("Removida uma replica!");
+        }
+
+        private async void UpdateService()
+        {
+            var service = await _client.Swarm.InspectServiceAsync(IDService);
+            await _client.Swarm.UpdateServiceAsync(IDService, new ServiceUpdateParameters()
+            {
+                Service = ReturnParametersService(),
+                Version = (long) service.Version.Index
+            });
+        }
+
+        private ServiceSpec ReturnParametersService()
+        {
+            return new ServiceSpec()
+            {
+                Name = "python-app",
+                Mode = new ServiceMode()
                 {
-                    Filters = new Dictionary<string, IDictionary<string, bool>>
+                    Replicated = new ReplicatedService()
                     {
+                        Replicas = replicas
+                    }
+                },
+                TaskTemplate = new TaskSpec()
+                {
+                    ContainerSpec = new ContainerSpec()
+                    {
+                        Image = "igornardin/newtonpython:v1.0",
+                    }
+                },
+                EndpointSpec = new EndpointSpec()
+                {
+                    Ports = new List<PortConfig>
+                    {
+                        new PortConfig()
                         {
-                            "status", new Dictionary<string, bool> { {"running", true} }
+                            Protocol = "tcp",
+                            TargetPort = 80,
+                            PublishedPort = 4000
+                        }
+
+                    }
+                }
+            };
+        }
+
+        private async void AddNode()
+        {
+            await _client.Swarm.CreateServiceAsync(new ServiceCreateParameters()
+            {
+                Service = new ServiceSpec()
+                {
+                    Name = "exporter",
+                    TaskTemplate = new TaskSpec()
+                    {
+                        ContainerSpec = new ContainerSpec()
+                        {
+                            Image = "wywywywy/docker_stats_exporter:latest",
+                            Mounts = new List<Mount>
+                            {
+                                new Mount
+                                {
+                                    Source = "/var/run/docker.sock",
+                                    Target = "/var/run/docker.sock"
+                                },
+                                new Mount
+                                {
+                                    Source = "/usr/bin/docker",
+                                    Target = "/usr/bin/docker"
+                                }
+                            }
+                        }
+                    },
+                    EndpointSpec = new EndpointSpec()
+                    {
+                        Ports = new List<PortConfig>
+                        {
+                            new PortConfig(){
+                                Protocol = "tcp",
+                                TargetPort = 9487,
+                                PublishedPort = 9487
+                            }
+
                         }
                     }
                 }
-            );
-            foreach (var container in containers)
-            {
-                if (container.Image == _settings.Image)
-                {
-                    await _client.Containers.StopContainerAsync(container.ID, new ContainerStopParameters());
-                    await _client.Containers.RemoveContainerAsync(container.ID, new ContainerRemoveParameters());
-                    Console.WriteLine($"Removido o container ID {container.ID}");
-                    break;
-                }
-            }
+            });
         }
     }
 }

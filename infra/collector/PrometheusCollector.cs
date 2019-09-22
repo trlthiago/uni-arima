@@ -37,15 +37,23 @@ namespace uni_elastic_manager.infra
 
         public List<CpuMetric> ParseCpuMetrics(string response)
         {
-            var parsedObject = JObject.Parse(response);
-            var values = parsedObject["data"]["result"][0]["values"];
             var metrics = new List<CpuMetric>();
+            var parsedObject = JObject.Parse(response);
+            if (!parsedObject["data"]["result"].HasValues)
+                return metrics;
+
+            var values = parsedObject["data"]["result"][0]["values"];
             foreach (JArray item in values)
             {
+                var value = item[1].ToString();
+                if (_settings.OS == "linux")
+                {
+                    value = value.Replace(".", ",");
+                }
                 var metric = new CpuMetric
                 {
                     Time = long.Parse(item[0].ToString()),
-                    Value = item[1].ToString()
+                    Value = value
                 };
                 metrics.Add(metric);
             }

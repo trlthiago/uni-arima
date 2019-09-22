@@ -17,7 +17,8 @@ namespace uni_elastic_manager
             var collector = PrometheusFactory.GetInstance(settings);
             var evaluator = new Evaluator(settings);
             var runner = RunnableFactory.GetInstance(settings);
-            var analyzer = new ArimaWithRBinary(2, 2, 2);
+            runner.InitializeRunnable();
+            var analyzer = new ArimaWithRBinary(0, 2, 0);
 
             while (true)
             {
