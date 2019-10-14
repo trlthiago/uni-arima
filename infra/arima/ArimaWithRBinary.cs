@@ -1,6 +1,7 @@
 using System;
 using RDotNet;
 using System.Linq;
+using log4net;
 
 namespace uni_elastic_manager.infra
 {
@@ -10,10 +11,12 @@ namespace uni_elastic_manager.infra
         private readonly int _p;
         private readonly int _d;
         private readonly int _q;
+        private ILog _log;
         public REngine re { get; private set; }
 
-        public ArimaWithRBinary(int p, int d, int q)
+        public ArimaWithRBinary(int p, int d, int q, ILog log)
         {
+            _log = log;
             _q = q;
             _d = d;
             _p = p;
@@ -24,15 +27,23 @@ namespace uni_elastic_manager.infra
         public double Calculate(string[] metrics)
         {
             if (metrics.Length < 5)
-               return 0;
+                return 0;
 
             var start = DateTime.UtcNow.Ticks;
-            var vector = re.CreateNumericVector(metrics.Select(x => double.Parse(x,System.Globalization.CultureInfo.CurrentCulture)).ToList());               
-            re.SetSymbol("y", vector);
-            re.Evaluate($"fit=arima(y, c({_q},{_d},{_p}))");
-            var resp = re.Evaluate($"f <- forecast(fit, h={forecast})");
-            var r = resp.AsList();
-            return r[3].AsNumeric()[forecast - 1];     
+            try
+            {
+                var vector = re.CreateNumericVector(metrics.Select(x => double.Parse(x, System.Globalization.CultureInfo.CurrentCulture)).ToList());
+                re.SetSymbol("y", vector);
+                re.Evaluate($"fit=arima(y, c({_q},{_d},{_p}))");
+                var resp = re.Evaluate($"f <- forecast(fit, h={forecast})");
+                var r = resp.AsList();
+                return r[3].AsNumeric()[forecast - 1];
+            }
+            catch (System.Exception e)
+            {
+                _log.Error($"Ocorreu a exceção: {e}");
+                return 0;
+            }
         }
     }
 }

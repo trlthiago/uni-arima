@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using Docker.DotNet;
 using Docker.DotNet.Models;
+using log4net;
+using uni_arima.infra.runnable;
 
 namespace uni_elastic_manager.infra.runnable
 {
@@ -9,31 +11,38 @@ namespace uni_elastic_manager.infra.runnable
     {
         protected readonly Settings _settings;
         private readonly DockerClient _client;
-        private ulong replicas;
+        private readonly int replicaspernode = 5;
+        private ulong replicas { get; set; }
         private string IDService;
+        private ILog _log;
+        private NodeInstances _nodes;
 
-        public RunnableDocker(Settings settings)
+        public RunnableDocker(Settings settings, ILog log, NodeInstances nodes)
         {
             _settings = settings;
             _client = new DockerClientConfiguration(new Uri(_settings.SocketDocker)).CreateClient();
+            _log = log;
+            _nodes = nodes;
         }
 
         public async void InitializeRunnable()
         {
-            replicas = 2;
-            AddNode();
+            replicas = 10;
             var response = await _client.Swarm.CreateServiceAsync(new ServiceCreateParameters()
             {
                 Service = ReturnParametersService()
             });
             IDService = response.ID;
+            UpdateExporter();
         }
 
         public void AddResource()
         {
             replicas++;
             UpdateService();
-            Console.WriteLine("Adicionada uma replica!");
+            if ((int)replicas > (_nodes.InstancesCounts() * replicaspernode))
+                AddNode();
+            _log.Info("Adicionada uma replica!");
         }
 
         public void RemoveResource()
@@ -42,7 +51,7 @@ namespace uni_elastic_manager.infra.runnable
                 return;
             replicas--;
             UpdateService();
-            Console.WriteLine("Removida uma replica!");
+            _log.Info("Removida uma replica!");
         }
 
         private async void UpdateService()
@@ -51,7 +60,7 @@ namespace uni_elastic_manager.infra.runnable
             await _client.Swarm.UpdateServiceAsync(IDService, new ServiceUpdateParameters()
             {
                 Service = ReturnParametersService(),
-                Version = (long) service.Version.Index
+                Version = (long)service.Version.Index
             });
         }
 
@@ -84,19 +93,38 @@ namespace uni_elastic_manager.infra.runnable
                             TargetPort = 80,
                             PublishedPort = 4000
                         }
-
+                    }
+                },
+                Networks = new List<NetworkAttachmentConfig>
+                {
+                    new NetworkAttachmentConfig()
+                    {
+                        Target = "newtoncotes"
                     }
                 }
             };
         }
 
-        private async void AddNode()
+        private void AddNode()
+        {
+            _nodes.AddNode();
+            UpdateExporter();
+        }
+
+        public async void UpdateExporter()
         {
             await _client.Swarm.CreateServiceAsync(new ServiceCreateParameters()
             {
                 Service = new ServiceSpec()
                 {
                     Name = "exporter",
+                    Mode = new ServiceMode()
+                    {
+                        Replicated = new ReplicatedService()
+                        {
+                            Replicas = (ulong) _nodes.InstancesCounts()
+                        }
+                    },
                     TaskTemplate = new TaskSpec()
                     {
                         ContainerSpec = new ContainerSpec()

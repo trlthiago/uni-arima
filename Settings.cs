@@ -15,5 +15,6 @@ namespace uni_elastic_manager
         public string SocketDocker => Environment.GetEnvironmentVariable("SocketDocker");
         public string Image => Environment.GetEnvironmentVariable("Image");
         public bool IsFake => bool.Parse(Environment.GetEnvironmentVariable("IsFake"));
+        public bool BinPacking => bool.Parse(Environment.GetEnvironmentVariable("BinPacking"));
     }
 }

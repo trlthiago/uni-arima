@@ -21,7 +21,8 @@
                 "OS": "windows",
                 "CPUThresholdUpper": "80",
                 "CPUThresholdLower": "20",
-                "IsFake": "true",                
+                "IsFake": "true",   
+                "BinPacking": "false"             
             }
         },
         {
@@ -46,6 +47,7 @@
                 "SocketDocker": "tcp://127.0.0.1:2375",
                 "Image": "igornardin/newtonpython:v1.0",
                 "IsFake": "false",
+                "BinPacking": "true",
             }
         },
         {
