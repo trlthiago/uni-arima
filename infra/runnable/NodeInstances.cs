@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using log4net;
+using Renci.SshNet;
 using uni_elastic_manager;
 
 namespace uni_arima.infra.runnable
@@ -9,6 +10,7 @@ namespace uni_arima.infra.runnable
         private List<string> nodesavaliable;
         private List<string> nodesactives;
         private ILog _log;
+        private SshClient _client;
         public NodeInstances(Settings settings, ILog log){
             nodesavaliable = new List<string>();
             nodesactives = new List<string>();
@@ -34,8 +36,12 @@ namespace uni_arima.infra.runnable
             nodesactives.Add(id);
         }
         public void RemoveNode(){
-            _log.Info("Removido um novo nó!");
+            var ipRemove = nodesactives[nodesactives.Count - 1];
+            _log.Info($"Removido o nó {ipRemove}!");
             nodesactives.RemoveAt(nodesactives.Count - 1);
+            _client = new SshClient(ipRemove, "docker", "tcuser");
+            _client.Connect();
+            _client.RunCommand("sudo poweroff");
         }
 
         public int InstancesCounts(){

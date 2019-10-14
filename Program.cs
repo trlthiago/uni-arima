@@ -22,6 +22,7 @@ namespace uni_elastic_manager
             var runner = RunnableFactory.GetInstance(settings, logger, nodes);
             runner.InitializeRunnable();
             var analyzer = new ArimaWithRBinary(2, 1, 2, logger);
+            nodes.RemoveNode();
 
             while (true)
             {
