@@ -9,13 +9,16 @@ namespace uni_elastic_manager.infra
     public abstract class PrometheusCollector : IMetricCollector
     {
         protected readonly Settings _settings;
+        protected readonly long _start;
         public PrometheusCollector(Settings settings)
         {
+            _start = ToUnixTime(DateTime.UtcNow);
             _settings = settings;
         }
 
         protected string Get(string query)
         {
+            Console.WriteLine(query);
             HttpClient client = new HttpClient();
             client.BaseAddress = new System.Uri($"http://{_settings.Prometheus}");
             var response = client.GetAsync(query).Result;
@@ -46,6 +49,8 @@ namespace uni_elastic_manager.infra
             foreach (JArray item in values)
             {
                 var value = item[1].ToString();
+                if (value == "NaN")
+                    continue;
                 if (_settings.OS == "linux")
                 {
                     value = value.Replace(".", ",");
@@ -62,9 +67,7 @@ namespace uni_elastic_manager.infra
 
         public virtual List<CpuMetric> Collect()
         {
-            var start = ToUnixTime(DateTime.UtcNow.AddMinutes(-15));
-            var end = ToUnixTime(DateTime.UtcNow);
-            var response = GetCpuMetric(start, end);
+            var response = GetCpuMetric(_start, ToUnixTime(DateTime.UtcNow));
             return ParseCpuMetrics(response);
         }
     }

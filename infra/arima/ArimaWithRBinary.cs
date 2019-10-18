@@ -37,6 +37,7 @@ namespace uni_elastic_manager.infra
                 re.Evaluate($"fit=arima(y, c({_q},{_d},{_p}))");
                 var resp = re.Evaluate($"f <- forecast(fit, h={forecast})");
                 var r = resp.AsList();
+                _log.Info($"Valor predito: {r[3].AsNumeric()[forecast - 1]}");
                 return r[3].AsNumeric()[forecast - 1];
             }
             catch (System.Exception e)

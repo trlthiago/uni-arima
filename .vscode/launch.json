@@ -42,7 +42,7 @@
                 "OS": "linux",
                 "Name": "python-app.*",
                 "CPUThresholdUpper": "80",
-                "CPUThresholdLower": "80",
+                "CPUThresholdLower": "40",
                 "Runnable": "Docker",
                 "SocketDocker": "tcp://127.0.0.1:2375",
                 "Image": "igornardin/newtonpython:v1.0",

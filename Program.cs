@@ -2,6 +2,7 @@
 using log4net.Config;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using uni_arima.infra.evaluator;
 using uni_arima.infra.runnable;
 using uni_elastic_manager.infra;
@@ -11,21 +12,25 @@ namespace uni_elastic_manager
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
+            configure();
             var logger = ConfigureLog();
             var settings = new Settings();
             var collector = PrometheusFactory.GetInstance(settings);
             var nodes = new NodeInstances(settings, logger);
-            var binpacking = new BinPackingService(nodes);
-            var evaluator = new Evaluator(settings);
             var runner = RunnableFactory.GetInstance(settings, logger, nodes);
+            var evaluator = new Evaluator(settings);
             runner.InitializeRunnable();
             var analyzer = new ArimaWithRBinary(2, 1, 2, logger);
-            nodes.RemoveNode();
+            var state = runner.getStateAsync();         
 
             while (true)
             {
+                if(await runner.getStateAsync() == RunnableState.Busy)
+                {
+                    continue;
+                }
                 var metrics = collector.Collect();
 
                 logger.Info(metrics.Select(x => x.Value).ToArray());
@@ -37,14 +42,13 @@ namespace uni_elastic_manager
                 else if (eval == EvaluatorAction.RemoveResource)
                     runner.RemoveResource();
                 
-                // if (settings.BinPacking)
-
-
 
                 System.Threading.Thread.Sleep(15000);
             }
         }
+        static void configure(){
 
+        }
         static ILog ConfigureLog()
         {
             var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly());

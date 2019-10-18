@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace uni_elastic_manager.infra.runnable
 {
     public class RunnableFake : IRunnable
@@ -9,6 +11,12 @@ namespace uni_elastic_manager.infra.runnable
         {
             
         }
+
+        public async Task<RunnableState> getStateAsync()
+        {
+            return RunnableState.Ready;            
+        }
+        
 
         public void RemoveResource()
         {

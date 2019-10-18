@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using log4net;
 using uni_elastic_manager;
 
@@ -21,6 +22,11 @@ namespace uni_elastic_manager.infra.runnable
         public void InitializeRunnable(){
             
         }
+        public async Task<RunnableState> getStateAsync()
+        {
+            return RunnableState.Ready;            
+        }
+
 
         public void AddResource()
         {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Docker.DotNet;
 using Docker.DotNet.Models;
 using log4net;
@@ -7,6 +8,13 @@ using uni_arima.infra.runnable;
 
 namespace uni_elastic_manager.infra.runnable
 {
+
+    public enum RunnableState
+    {
+        Ready = 1,
+        Busy = 2,
+    }
+
     public class RunnableDocker : IRunnable
     {
         protected readonly Settings _settings;
@@ -14,6 +22,7 @@ namespace uni_elastic_manager.infra.runnable
         private readonly int replicaspernode = 5;
         private ulong replicas { get; set; }
         private string IDService;
+        private string IDExporterService;
         private ILog _log;
         private NodeInstances _nodes;
 
@@ -27,14 +36,28 @@ namespace uni_elastic_manager.infra.runnable
 
         public async void InitializeRunnable()
         {
-            replicas = 10;
+            replicas = 1;
             var response = await _client.Swarm.CreateServiceAsync(new ServiceCreateParameters()
             {
                 Service = ReturnParametersService()
             });
             IDService = response.ID;
-            UpdateExporter();
+            //CreateExporter();
         }
+
+        public async Task<RunnableState> getStateAsync()
+        {
+            var tasks = await _client.Tasks.ListAsync();
+            foreach (var item in tasks)
+            {
+                if (item.ServiceID == IDService && item.Status.State != TaskState.Running)
+                {
+                    return RunnableState.Busy;
+                }
+            }
+            return RunnableState.Ready;            
+        }
+
 
         public void AddResource()
         {
@@ -51,6 +74,9 @@ namespace uni_elastic_manager.infra.runnable
                 return;
             replicas--;
             UpdateService();
+            Console.WriteLine($"{_nodes.InstancesCounts()} > {Math.Ceiling( (double) replicas / replicaspernode)}");
+            if (_nodes.InstancesCounts() > Math.Ceiling( (double) replicas / replicaspernode))
+                RemoveNode();
             _log.Info("Removida uma replica!");
         }
 
@@ -108,29 +134,50 @@ namespace uni_elastic_manager.infra.runnable
         private void AddNode()
         {
             _nodes.AddNode();
-            UpdateExporter();
+            //UpdateExporter();
         }
-
+        private void RemoveNode()
+        {
+            _nodes.RemoveNode();
+            //UpdateExporter();
+        }
         public async void UpdateExporter()
         {
-            await _client.Swarm.CreateServiceAsync(new ServiceCreateParameters()
+            var service = await _client.Swarm.InspectServiceAsync(IDExporterService);
+            await _client.Swarm.UpdateServiceAsync(IDExporterService, new ServiceUpdateParameters()
             {
-                Service = new ServiceSpec()
+                Service = GetExporterService(),
+                Version = (long)service.Version.Index
+            });
+        }
+
+        public async void CreateExporter()
+        {
+            var response = await _client.Swarm.CreateServiceAsync(new ServiceCreateParameters()
+            {
+                Service = GetExporterService()
+            });
+            IDExporterService = response.ID;
+        }
+
+        private ServiceSpec GetExporterService()
+        {
+            return new ServiceSpec()
+            {
+                Name = "exporter",
+                Mode = new ServiceMode()
                 {
-                    Name = "exporter",
-                    Mode = new ServiceMode()
+                    Replicated = new ReplicatedService()
                     {
-                        Replicated = new ReplicatedService()
-                        {
-                            Replicas = (ulong) _nodes.InstancesCounts()
-                        }
-                    },
-                    TaskTemplate = new TaskSpec()
+                        Replicas = (ulong)_nodes.InstancesCounts()
+                    }
+                },
+                TaskTemplate = new TaskSpec()
+                {
+                    ContainerSpec = new ContainerSpec()
                     {
-                        ContainerSpec = new ContainerSpec()
-                        {
-                            Image = "wywywywy/docker_stats_exporter:latest",
-                            Mounts = new List<Mount>
+                        Image = "wywywywy/docker_stats_exporter:latest",
+                        Mounts = new List<Mount>
                             {
                                 new Mount
                                 {
@@ -143,11 +190,11 @@ namespace uni_elastic_manager.infra.runnable
                                     Target = "/usr/bin/docker"
                                 }
                             }
-                        }
-                    },
-                    EndpointSpec = new EndpointSpec()
-                    {
-                        Ports = new List<PortConfig>
+                    }
+                },
+                EndpointSpec = new EndpointSpec()
+                {
+                    Ports = new List<PortConfig>
                         {
                             new PortConfig(){
                                 Protocol = "tcp",
@@ -156,9 +203,9 @@ namespace uni_elastic_manager.infra.runnable
                             }
 
                         }
-                    }
                 }
-            });
+            };
         }
+
     }
 }
