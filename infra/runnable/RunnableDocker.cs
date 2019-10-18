@@ -74,7 +74,6 @@ namespace uni_elastic_manager.infra.runnable
                 return;
             replicas--;
             UpdateService();
-            Console.WriteLine($"{_nodes.InstancesCounts()} > {Math.Ceiling( (double) replicas / replicaspernode)}");
             if (_nodes.InstancesCounts() > Math.Ceiling( (double) replicas / replicaspernode))
                 RemoveNode();
             _log.Info("Removida uma replica!");

@@ -38,11 +38,15 @@ namespace uni_elastic_manager
                 EvaluatorAction eval = evaluator.Evaluate(analyzer.Calculate(metrics.Select(x => x.Value).ToArray()));
 
                 if (eval == EvaluatorAction.AddResource)
+                {
                     runner.AddResource();
+                    collector.ResetStartTime();
+                }
                 else if (eval == EvaluatorAction.RemoveResource)
+                {
                     runner.RemoveResource();
-                
-
+                    collector.ResetStartTime();
+                }               
                 System.Threading.Thread.Sleep(15000);
             }
         }

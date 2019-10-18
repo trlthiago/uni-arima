@@ -9,7 +9,7 @@ namespace uni_elastic_manager.infra
     public abstract class PrometheusCollector : IMetricCollector
     {
         protected readonly Settings _settings;
-        protected readonly long _start;
+        protected long _start;
         public PrometheusCollector(Settings settings)
         {
             _start = ToUnixTime(DateTime.UtcNow);
@@ -18,11 +18,14 @@ namespace uni_elastic_manager.infra
 
         protected string Get(string query)
         {
-            Console.WriteLine(query);
             HttpClient client = new HttpClient();
             client.BaseAddress = new System.Uri($"http://{_settings.Prometheus}");
             var response = client.GetAsync(query).Result;
             return response.Content.ReadAsStringAsync().Result;
+        }
+
+        public void ResetStartTime(){
+            _start = ToUnixTime(DateTime.UtcNow);
         }
 
         protected abstract string GetCpuMetric(long start, long end);
