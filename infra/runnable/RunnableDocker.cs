@@ -19,7 +19,7 @@ namespace uni_elastic_manager.infra.runnable
     {
         protected readonly Settings _settings;
         private readonly DockerClient _client;
-        private readonly int replicaspernode = 5;
+        private readonly int replicaspernode = 3;
         private ulong replicas { get; set; }
         private string IDService;
         private string IDExporterService;
@@ -42,7 +42,7 @@ namespace uni_elastic_manager.infra.runnable
                 Service = ReturnParametersService()
             });
             IDService = response.ID;
-            //CreateExporter();
+
         }
 
         public async Task<RunnableState> getStateAsync()
@@ -59,24 +59,32 @@ namespace uni_elastic_manager.infra.runnable
         }
 
 
-        public void AddResource()
+        public bool AddResource()
         {
+            _log.Info($"Adicionada 1 replica!");
             replicas++;
             UpdateService();
-            if ((int)replicas > (_nodes.InstancesCounts() * replicaspernode))
+            if (((int)replicas > (_nodes.InstancesCounts() * replicaspernode)) && (_nodes.InstancesCounts() < _nodes.InstancesAvaliableCounts()))
+            {
                 AddNode();
-            _log.Info("Adicionada uma replica!");
+                return true;
+            }
+            return false;
         }
 
-        public void RemoveResource()
+        public bool RemoveResource()
         {
             if (replicas == 1)
-                return;
+                return false;
+            _log.Info($"Removida 1 replica!");
             replicas--;
             UpdateService();
             if (_nodes.InstancesCounts() > Math.Ceiling( (double) replicas / replicaspernode))
+            {
                 RemoveNode();
-            _log.Info("Removida uma replica!");
+                return true;
+            }
+            return false;
         }
 
         private async void UpdateService()
@@ -105,8 +113,16 @@ namespace uni_elastic_manager.infra.runnable
                 {
                     ContainerSpec = new ContainerSpec()
                     {
-                        Image = "igornardin/newtonpython:v1.0",
-                    }
+                        Image = "igornardin/newtonpython:v2.0",
+
+                    },
+                    // Placement = new Placement()
+                    // {
+                    //     Constraints = new List<string>()
+                    //     {
+                    //         "node.role == worker"
+                    //     }
+                    // }
                 },
                 EndpointSpec = new EndpointSpec()
                 {
@@ -133,78 +149,10 @@ namespace uni_elastic_manager.infra.runnable
         private void AddNode()
         {
             _nodes.AddNode();
-            //UpdateExporter();
         }
         private void RemoveNode()
         {
             _nodes.RemoveNode();
-            //UpdateExporter();
         }
-        public async void UpdateExporter()
-        {
-            var service = await _client.Swarm.InspectServiceAsync(IDExporterService);
-            await _client.Swarm.UpdateServiceAsync(IDExporterService, new ServiceUpdateParameters()
-            {
-                Service = GetExporterService(),
-                Version = (long)service.Version.Index
-            });
-        }
-
-        public async void CreateExporter()
-        {
-            var response = await _client.Swarm.CreateServiceAsync(new ServiceCreateParameters()
-            {
-                Service = GetExporterService()
-            });
-            IDExporterService = response.ID;
-        }
-
-        private ServiceSpec GetExporterService()
-        {
-            return new ServiceSpec()
-            {
-                Name = "exporter",
-                Mode = new ServiceMode()
-                {
-                    Replicated = new ReplicatedService()
-                    {
-                        Replicas = (ulong)_nodes.InstancesCounts()
-                    }
-                },
-                TaskTemplate = new TaskSpec()
-                {
-                    ContainerSpec = new ContainerSpec()
-                    {
-                        Image = "wywywywy/docker_stats_exporter:latest",
-                        Mounts = new List<Mount>
-                            {
-                                new Mount
-                                {
-                                    Source = "/var/run/docker.sock",
-                                    Target = "/var/run/docker.sock"
-                                },
-                                new Mount
-                                {
-                                    Source = "/usr/bin/docker",
-                                    Target = "/usr/bin/docker"
-                                }
-                            }
-                    }
-                },
-                EndpointSpec = new EndpointSpec()
-                {
-                    Ports = new List<PortConfig>
-                        {
-                            new PortConfig(){
-                                Protocol = "tcp",
-                                TargetPort = 9487,
-                                PublishedPort = 9487
-                            }
-
-                        }
-                }
-            };
-        }
-
     }
 }

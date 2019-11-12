@@ -28,12 +28,12 @@ namespace uni_elastic_manager.infra.runnable
         }
 
 
-        public void AddResource()
+        public bool AddResource()
         {
              throw new System.NotImplementedException();
         }
 
-        public void RemoveResource()
+        public bool RemoveResource()
         {
             throw new System.NotImplementedException();
         }

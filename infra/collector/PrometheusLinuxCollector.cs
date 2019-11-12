@@ -9,7 +9,8 @@ namespace uni_elastic_manager.infra
 
         protected override string GetCpuMetric(long start, long end)
         {
-            return Get($"api/v1/query_range?query=avg%20(irate({_settings.Metric}%7Binstance%3D%22{_settings.Instance}%22%2C%20name%3D~%22{_settings.Name}%22%7D%5B30s%5D))%20*%20100&start={start}&end={end}&step=15");
+            //return Get($"api/v1/query_range?query=avg%20(irate({_settings.Metric}%7Binstance%3D%22{_settings.Instance}%22%2C%20name%3D~%22{_settings.Name}%22%7D%5B5m%5D))%20*%20100&start={start}&end={end}&step=15");
+            return Get($"api/v1/query_range?query=avg%20({_settings.Metric}%7Binstance%3D%22{_settings.Instance}%22%2C%20name%3D~%22{_settings.Name}%22%7D)&start={start}&end={end}&step=15");
         }
     }
 }

@@ -14,7 +14,6 @@ namespace uni_elastic_manager
     {
         static async Task Main(string[] args)
         {
-            configure();
             var logger = ConfigureLog();
             var settings = new Settings();
             var collector = PrometheusFactory.GetInstance(settings);
@@ -39,19 +38,16 @@ namespace uni_elastic_manager
 
                 if (eval == EvaluatorAction.AddResource)
                 {
-                    runner.AddResource();
-                    collector.ResetStartTime();
+                    if (runner.AddResource())
+                        collector.ResetStartTime();
                 }
                 else if (eval == EvaluatorAction.RemoveResource)
                 {
-                    runner.RemoveResource();
-                    collector.ResetStartTime();
+                    if (runner.RemoveResource())
+                        collector.ResetStartTime();
                 }               
                 System.Threading.Thread.Sleep(15000);
             }
-        }
-        static void configure(){
-
         }
         static ILog ConfigureLog()
         {

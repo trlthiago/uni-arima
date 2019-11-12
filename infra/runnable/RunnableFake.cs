@@ -7,9 +7,9 @@ namespace uni_elastic_manager.infra.runnable
         public void InitializeRunnable(){
             
         }
-        public void AddResource()
+        public bool AddResource()
         {
-            
+            return false;            
         }
 
         public async Task<RunnableState> getStateAsync()
@@ -18,9 +18,9 @@ namespace uni_elastic_manager.infra.runnable
         }
         
 
-        public void RemoveResource()
+        public bool RemoveResource()
         {
-           
+            return false;
         }
     }
 }

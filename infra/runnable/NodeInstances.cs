@@ -15,8 +15,9 @@ namespace uni_arima.infra.runnable
             nodesavaliable = new List<string>();
             nodesactives = new List<string>();
             nodesavaliable.Add("127.0.0.1");
-            nodesavaliable.Add("192.168.99.110");
+            // nodesavaliable.Add("192.168.1.11");
             nodesactives.Add("127.0.0.1");
+            // nodesactives.Add("192.168.1.11");
             _log = log;
         }
 
@@ -33,9 +34,10 @@ namespace uni_arima.infra.runnable
                 return;
             _log.Info($"Adicionado o nó {ip}!");
             nodesactives.Add(ip);
-            _client = new SshClient(ip, "docker", "tcuser");
+            _client = new SshClient(ip, "igornardin", "Liberato2009");
             _client.Connect();
-            _client.RunCommand("docker swarm join --token SWMTKN-1-25utwt6vlq0wt6ocbdwsh0sjulxkii9n6dnr6deyytuwzlmz4x-5bpgs7zc34j6pll7wtnpxjnm0 192.168.99.1:2377");
+            _client.RunCommand("docker swarm join --token SWMTKN-1-1kp5ubze1ztv49phg3jorhx4k37sh7t3x5bm8wsnkoyoo322fw-59hvp770butfwjosj8rf52xbh 192.168.1.6:2377");
+            System.Threading.Thread.Sleep(60000);
         }
         public void RemoveNode(){
             if (nodesactives.Count == 1)
@@ -43,7 +45,7 @@ namespace uni_arima.infra.runnable
             var ipRemove = nodesactives[nodesactives.Count - 1];
             _log.Info($"Removido o nó {ipRemove}!");
             nodesactives.RemoveAt(nodesactives.Count - 1);
-            _client = new SshClient(ipRemove, "docker", "tcuser");
+            _client = new SshClient(ipRemove, "igornardin", "Liberato2009");
             _client.Connect();
             _client.RunCommand("docker swarm leave");
         }
@@ -51,6 +53,10 @@ namespace uni_arima.infra.runnable
         public int InstancesCounts(){
             return nodesactives.Count;
         }
+
+        public int InstancesAvaliableCounts(){
+            return nodesavaliable.Count;
+        }        
 
 
     }
