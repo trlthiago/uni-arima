@@ -18,8 +18,6 @@ namespace uni_arima.infra.runnable
             nodesactives = new List<string>();
             nodesavaliable.Add("node005");
             nodesavaliable.Add("node001");
-            nodesavaliable.Add("node002");
-            nodesavaliable.Add("node003");
             nodesactives.Add("node005");
             _log = log;
         }

@@ -22,7 +22,8 @@ namespace uni_elastic_manager
             var evaluator = new Evaluator(settings);
             runner.InitializeRunnable();
             var analyzer = new ArimaWithRBinary(2, 0, 1, logger);
-            var state = runner.getStateAsync();         
+            var state = runner.getStateAsync();  
+            logger.Debug("Teste");
 
             while (true)
             {
