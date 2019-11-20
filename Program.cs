@@ -23,7 +23,7 @@ namespace uni_elastic_manager
             runner.InitializeRunnable();
             var analyzer = new ArimaWithRBinary(2, 0, 1, logger);
             var state = runner.getStateAsync();  
-            logger.Debug("Teste");
+            logger.Debug("Iniciou os testes!");
 
             while (true)
             {

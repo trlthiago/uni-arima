@@ -63,12 +63,12 @@ namespace uni_elastic_manager.infra.runnable
         {
             _log.Info($"Adicionada 1 replica!");
             replicas++;
-            UpdateService();
             if (((int)replicas > (_nodes.InstancesCounts() * replicaspernode)) && (_nodes.InstancesCounts() < _nodes.InstancesAvaliableCounts()))
             {
                 AddNode();
                 return true;
             }
+            UpdateService();
             return false;
         }
 
