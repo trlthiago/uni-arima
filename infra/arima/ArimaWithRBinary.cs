@@ -35,9 +35,11 @@ namespace uni_elastic_manager.infra
                 var vector = re.CreateNumericVector(metrics.Select(x => double.Parse(x, System.Globalization.CultureInfo.CurrentCulture)).ToList());
                 re.SetSymbol("y", vector);
                 re.Evaluate($"fit=arima(y, c({_q},{_d},{_p}), method=\"ML\")");
+                _log.Debug($"fit=arima(y, c({_q},{_d},{_p}), method=\"ML\")");
                 var resp = re.Evaluate($"f <- forecast(fit, h={forecast})");
                 var r = resp.AsList();
                 _log.Info($"Valor predito: {r[3].AsNumeric()[forecast - 1]}");
+                _log.Debug($"Valor predito: {r[3].AsNumeric()[forecast - 1]}");
                 return r[3].AsNumeric()[forecast - 1];
             }
             catch (System.Exception e)

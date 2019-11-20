@@ -31,19 +31,23 @@ namespace uni_elastic_manager
                 {
                     continue;
                 }
+                logger.Debug("Vai fazer a coleta...");
                 var metrics = collector.Collect();
 
                 logger.Info(metrics.Select(x => x.Value).ToArray());
+                logger.Debug("Coleta realizada...");
 
                 EvaluatorAction eval = evaluator.Evaluate(analyzer.Calculate(metrics.Select(x => x.Value).ToArray()));
-
+                logger.Debug("Avalia o resultado...");
                 if (eval == EvaluatorAction.AddResource)
                 {
+                    logger.Debug("Adiciona recurso...");
                     if (runner.AddResource())
                         collector.ResetStartTime();
                 }
                 else if (eval == EvaluatorAction.RemoveResource)
                 {
+                    logger.Debug("Remove recurso...");
                     if (runner.RemoveResource())
                         collector.ResetStartTime();
                 }               
