@@ -16,5 +16,9 @@ namespace uni_elastic_manager
         public string Image => Environment.GetEnvironmentVariable("Image");
         public bool IsFake => bool.Parse(Environment.GetEnvironmentVariable("IsFake"));
         public bool BinPacking => bool.Parse(Environment.GetEnvironmentVariable("BinPacking"));
+        public string SwarmCommand => Environment.GetEnvironmentVariable("SwarmCommand");
+        public string SSHLogin => Environment.GetEnvironmentVariable("SSHLogin");
+        public string SSHPass => Environment.GetEnvironmentVariable("SSHPass");
+        
     }
 }

@@ -48,6 +48,9 @@
                 "Image": "igornardin/newtonpython:v2.0",
                 "IsFake": "false",
                 "BinPacking": "true",
+                "SwarmCommand": "docker swarm join --token SWMTKN-1-1kp5ubze1ztv49phg3jorhx4k37sh7t3x5bm8wsnkoyoo322fw-59hvp770butfwjosj8rf52xbh 192.168.1.6:2377",
+                "SSHLogin": "igornardin",
+                "SSHPass": "teste123",
             }
         },
         {
