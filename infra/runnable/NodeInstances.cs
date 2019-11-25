@@ -16,9 +16,12 @@ namespace uni_arima.infra.runnable
             _settings = settings;
             nodesavaliable = new List<string>();
             nodesactives = new List<string>();
-            nodesavaliable.Add("node005");
+            // nodesavaliable.Add("127.0.0.1");
+            // nodesactives.Add("127.0.0.1");
             nodesavaliable.Add("node001");
-            nodesactives.Add("node005");
+            nodesavaliable.Add("node002");
+            nodesavaliable.Add("node003");
+            nodesactives.Add("node001");
             _log = log;
         }
 

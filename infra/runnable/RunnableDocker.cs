@@ -19,10 +19,9 @@ namespace uni_elastic_manager.infra.runnable
     {
         protected readonly Settings _settings;
         private readonly DockerClient _client;
-        private readonly int replicaspernode = 3;
+        private readonly int replicaspernode = 4;
         private ulong replicas { get; set; }
         private string IDService;
-        private string IDExporterService;
         private ILog _log;
         private NodeInstances _nodes;
 
@@ -66,6 +65,7 @@ namespace uni_elastic_manager.infra.runnable
             if (((int)replicas > (_nodes.InstancesCounts() * replicaspernode)) && (_nodes.InstancesCounts() < _nodes.InstancesAvaliableCounts()))
             {
                 AddNode();
+                UpdateService();
                 return true;
             }
             UpdateService();
@@ -116,13 +116,18 @@ namespace uni_elastic_manager.infra.runnable
                         Image = "igornardin/newtonpython:v2.0",
 
                     },
-                    // Placement = new Placement()
-                    // {
-                    //     Constraints = new List<string>()
-                    //     {
-                    //         "node.role == worker"
-                    //     }
-                    // }
+                    Placement = new Placement()
+                    {
+                        Constraints = new List<string>()
+                        {
+                            "node.role == worker"
+                        }
+                    },
+                    Resources = new ResourceRequirements(){
+                        Limits = new SwarmResources(){
+                            NanoCPUs = 1000000000
+                        }
+                    }
                 },
                 EndpointSpec = new EndpointSpec()
                 {
