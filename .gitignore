@@ -1,4 +1,5 @@
 errorsLog.log
 metrics-ahead.log
+debug.log
 bin/*
 obj/*
