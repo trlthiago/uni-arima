@@ -32,7 +32,7 @@ namespace uni_elastic_manager.infra
             var start = DateTime.UtcNow.Ticks;
             try
             {
-                var vector = re.CreateNumericVector(metrics.Select(x => double.Parse(x, System.Globalization.CultureInfo.CurrentCulture)).ToList());
+                var vector = re.CreateNumericVector(metrics.Select(x => double.Parse(x, System.Globalization.CultureInfo.CurrentCulture.NumberFormat)).ToList());
                 re.SetSymbol("y", vector);
                 var y = re.Evaluate("y");
                 _log.Debug(System.Globalization.CultureInfo.CurrentCulture.ToString());
