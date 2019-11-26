@@ -137,7 +137,8 @@ namespace uni_elastic_manager.infra.runnable
                         {
                             Protocol = "tcp",
                             TargetPort = 80,
-                            PublishedPort = 4000
+                            PublishedPort = 4000,
+                            PublishMode = "ingress"
                         }
                     }
                 },
