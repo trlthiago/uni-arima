@@ -35,7 +35,7 @@ namespace uni_elastic_manager.infra.runnable
 
         public async void InitializeRunnable()
         {
-            replicas = 1;
+            replicas = (ulong) replicaspernode;
             var response = await _client.Swarm.CreateServiceAsync(new ServiceCreateParameters()
             {
                 Service = ReturnParametersService()
@@ -60,8 +60,8 @@ namespace uni_elastic_manager.infra.runnable
 
         public bool AddResource()
         {
-            _log.Info($"Adicionada 1 replica!");
-            replicas++;
+            _log.Info($"Adicionada 4 replica!");
+            replicas = replicas + (ulong) replicaspernode;
             if (((int)replicas > (_nodes.InstancesCounts() * replicaspernode)) && (_nodes.InstancesCounts() < _nodes.InstancesAvaliableCounts()))
             {
                 AddNode();
@@ -74,10 +74,10 @@ namespace uni_elastic_manager.infra.runnable
 
         public bool RemoveResource()
         {
-            if (replicas == 1)
+            if (replicas == (ulong) replicaspernode)
                 return false;
             _log.Info($"Removida 1 replica!");
-            replicas--;
+            replicas = replicas - (ulong) replicaspernode;
             UpdateService();
             if (_nodes.InstancesCounts() > Math.Ceiling( (double) replicas / replicaspernode))
             {
