@@ -19,7 +19,7 @@ namespace uni_elastic_manager.infra.runnable
     {
         protected readonly Settings _settings;
         private readonly DockerClient _client;
-        private readonly int replicaspernode = 4;
+        private readonly int replicaspernode = 2;
         private readonly int replicasperadd = 1;
         private ulong replicas { get; set; }
         private string IDService;
@@ -124,11 +124,11 @@ namespace uni_elastic_manager.infra.runnable
                             "node.role == worker"
                         }
                     },
-                    Resources = new ResourceRequirements(){
-                        Limits = new SwarmResources(){
-                            NanoCPUs = 1000000000
-                        }
-                    }
+                    // Resources = new ResourceRequirements(){
+                    //     Limits = new SwarmResources(){
+                    //         NanoCPUs = 1000000000
+                    //     }
+                    // }
                 },
                 EndpointSpec = new EndpointSpec()
                 {
