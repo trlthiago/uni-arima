@@ -61,6 +61,8 @@ namespace uni_elastic_manager.infra.runnable
 
         public bool AddResource()
         {
+            if (replicas == (ulong) replicaspernode * (ulong) _nodes.InstancesAvaliableCounts())
+                return false;
             _log.Info($"Adicionada {replicasperadd} replica!");
             replicas = replicas + (ulong) replicasperadd;
             if (((int)replicas > (_nodes.InstancesCounts() * replicaspernode)) && (_nodes.InstancesCounts() < _nodes.InstancesAvaliableCounts()))
@@ -114,7 +116,7 @@ namespace uni_elastic_manager.infra.runnable
                 {
                     ContainerSpec = new ContainerSpec()
                     {
-                        Image = "igornardin/newtonpython:v3.0",
+                        Image = "igornardin/newtonpython:v2.0",
 
                     },
                     Placement = new Placement()
