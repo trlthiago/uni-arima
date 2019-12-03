@@ -20,6 +20,7 @@ namespace uni_elastic_manager.infra.runnable
         protected readonly Settings _settings;
         private readonly DockerClient _client;
         private readonly int replicaspernode = 4;
+        private readonly int replicasperadd = 1;
         private ulong replicas { get; set; }
         private string IDService;
         private ILog _log;
@@ -35,7 +36,7 @@ namespace uni_elastic_manager.infra.runnable
 
         public async void InitializeRunnable()
         {
-            replicas = (ulong) replicaspernode;
+            replicas = (ulong) replicasperadd;
             var response = await _client.Swarm.CreateServiceAsync(new ServiceCreateParameters()
             {
                 Service = ReturnParametersService()
@@ -60,8 +61,8 @@ namespace uni_elastic_manager.infra.runnable
 
         public bool AddResource()
         {
-            _log.Info($"Adicionada 4 replica!");
-            replicas = replicas + (ulong) replicaspernode;
+            _log.Info($"Adicionada {replicasperadd} replica!");
+            replicas = replicas + (ulong) replicasperadd;
             if (((int)replicas > (_nodes.InstancesCounts() * replicaspernode)) && (_nodes.InstancesCounts() < _nodes.InstancesAvaliableCounts()))
             {
                 AddNode();
@@ -74,10 +75,10 @@ namespace uni_elastic_manager.infra.runnable
 
         public bool RemoveResource()
         {
-            if (replicas == (ulong) replicaspernode)
+            if (replicas == (ulong) replicasperadd)
                 return false;
-            _log.Info($"Removida 1 replica!");
-            replicas = replicas - (ulong) replicaspernode;
+            _log.Info($"Removida {replicasperadd} replica!");
+            replicas = replicas - (ulong) replicasperadd;
             UpdateService();
             if (_nodes.InstancesCounts() > Math.Ceiling( (double) replicas / replicaspernode))
             {
@@ -113,7 +114,7 @@ namespace uni_elastic_manager.infra.runnable
                 {
                     ContainerSpec = new ContainerSpec()
                     {
-                        Image = "igornardin/newtonpython:v2.0",
+                        Image = "igornardin/newtonpython:v3.0",
 
                     },
                     Placement = new Placement()
