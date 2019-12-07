@@ -47,14 +47,14 @@ namespace uni_elastic_manager
                 if (eval == EvaluatorAction.AddResource)
                 {
                     logger.Debug("Adiciona recurso...");
-                    runner.AddResource()
+                    runner.AddResource();
                     //if (runner.AddResource())
                         collector.ResetStartTime();
                 }
                 else if (eval == EvaluatorAction.RemoveResource)
                 {
                     logger.Debug("Remove recurso...");
-                    runner.RemoveResource()
+                    runner.RemoveResource();
                     //if (runner.RemoveResource())
                         collector.ResetStartTime();
                 }               
