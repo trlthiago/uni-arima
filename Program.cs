@@ -21,7 +21,7 @@ namespace uni_elastic_manager
             var runner = RunnableFactory.GetInstance(settings, logger, nodes);
             var evaluator = new Evaluator(settings);
             runner.InitializeRunnable();
-            var analyzer = new ArimaWithRBinary(0, 2, 1, logger);
+            var analyzer = new ArimaWithRBinary(2, 0, 1, logger);
             var state = runner.getStateAsync();  
             logger.Debug("Iniciou os testes!");
 
