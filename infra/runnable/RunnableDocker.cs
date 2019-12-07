@@ -49,12 +49,12 @@ namespace uni_elastic_manager.infra.runnable
                 Service = ReturnParametersService()
             });
             IDService = response.ID;
-            File.Delete("../finalizou.txt");
+            File.Delete("/home/igorn/workspace/finalizou.txt");
         }
 
         public async Task<RunnableState> getStateAsync()
         {
-            if (File.Exists("../finalizou.txt")){
+            if (File.Exists("/home/igorn/workspace/finalizou.txt")){
                 return RunnableState.Finished;
             }
             var tasks = await _client.Tasks.ListAsync();
