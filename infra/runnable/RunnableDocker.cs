@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Docker.DotNet;
 using Docker.DotNet.Models;
@@ -13,6 +14,7 @@ namespace uni_elastic_manager.infra.runnable
     {
         Ready = 1,
         Busy = 2,
+        Finished = 3,
     }
 
     public class RunnableDocker : IRunnable
@@ -36,17 +38,25 @@ namespace uni_elastic_manager.infra.runnable
 
         public async void InitializeRunnable()
         {
+            var services = await _client.Swarm.ListServicesAsync();
+            foreach (var item in services)
+            {
+                await _client.Swarm.RemoveServiceAsync(item.ID);
+            }
             replicas = (ulong) replicasperadd;
             var response = await _client.Swarm.CreateServiceAsync(new ServiceCreateParameters()
             {
                 Service = ReturnParametersService()
             });
             IDService = response.ID;
-
+            File.Delete("../finalizou.txt");
         }
 
         public async Task<RunnableState> getStateAsync()
         {
+            if (File.Exists("../finalizou.txt")){
+                return RunnableState.Finished;
+            }
             var tasks = await _client.Tasks.ListAsync();
             foreach (var item in tasks)
             {

@@ -27,9 +27,14 @@ namespace uni_elastic_manager
 
             while (true)
             {
-                if(await runner.getStateAsync() == RunnableState.Busy)
+                switch (await runner.getStateAsync())
                 {
-                    continue;
+                    case RunnableState.Busy:
+                        continue;
+                    case RunnableState.Finished:
+                        return;
+                    default:
+                        break;
                 }
                 logger.Debug("Vai fazer a coleta...");
                 var metrics = collector.Collect();
