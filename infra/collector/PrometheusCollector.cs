@@ -25,7 +25,7 @@ namespace uni_elastic_manager.infra
         }
 
         public void ResetStartTime(){
-            _start = ToUnixTime(DateTime.UtcNow);
+            _start = ToUnixTime(DateTime.UtcNow.AddSeconds(5));
         }
 
         protected abstract string GetCpuMetric(long start, long end);
