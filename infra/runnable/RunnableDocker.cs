@@ -136,11 +136,11 @@ namespace uni_elastic_manager.infra.runnable
                             "node.role == worker"
                         }
                     },
-                    // Resources = new ResourceRequirements(){
-                    //     Limits = new SwarmResources(){
-                    //         NanoCPUs = 1000000000
-                    //     }
-                    // }
+                    Resources = new ResourceRequirements(){
+                        Limits = new SwarmResources(){
+                            NanoCPUs = 1000000000
+                        }
+                    }
                 },
                 EndpointSpec = new EndpointSpec()
                 {
