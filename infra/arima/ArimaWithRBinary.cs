@@ -7,7 +7,7 @@ namespace uni_elastic_manager.infra
 {
     public class ArimaWithRBinary : IArima
     {
-        static int forecast = 8;
+        static int forecast = 4;
         private readonly int _p;
         private readonly int _d;
         private readonly int _q;
