@@ -22,6 +22,7 @@ namespace uni_arima.infra.runnable
             nodesavaliable.Add("node002");
             nodesavaliable.Add("node003");
             nodesactives.Add("node001");
+            nodesactives.Add("node002");
             _log = log;
         }
 
