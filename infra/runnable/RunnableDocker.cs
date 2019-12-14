@@ -22,7 +22,7 @@ namespace uni_elastic_manager.infra.runnable
         protected readonly Settings _settings;
         private readonly DockerClient _client;
         private readonly int replicaspernode = 8;
-        private readonly int replicasperadd = 1;
+        private readonly int replicasperadd = 2;
         private ulong replicas { get; set; }
         private string IDService;
         private ILog _log;
