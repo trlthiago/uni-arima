@@ -26,7 +26,7 @@ namespace uni_elastic_manager.infra
 
         public double Calculate(string[] metrics)
         {
-            if (metrics.Length < 5)
+            if (metrics.Length < 6)
                 return 0;
 
             var start = DateTime.UtcNow.Ticks;
