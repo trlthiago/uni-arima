@@ -43,7 +43,7 @@ namespace uni_elastic_manager.infra.runnable
             {
                 await _client.Swarm.RemoveServiceAsync(item.ID);
             }
-            replicas = (ulong) replicaspernode;
+            replicas = (ulong) replicaspernode + 4;
             var response = await _client.Swarm.CreateServiceAsync(new ServiceCreateParameters()
             {
                 Service = ReturnParametersService()
