@@ -17,9 +17,9 @@ namespace uni_elastic_manager.infra
         public ArimaWithRBinary(int p, int d, int q, ILog log)
         {
             _log = log;
-            _q = q;
-            _d = d;
             _p = p;
+            _d = d;
+            _q = q;
             re = REngine.GetInstance();
             re.Evaluate("require(forecast)");
         }
