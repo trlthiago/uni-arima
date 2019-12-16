@@ -37,8 +37,8 @@ namespace uni_elastic_manager.infra
                 re.SetSymbol("y", vector);
                 var y = re.Evaluate("y");
                 _log.Debug(System.Globalization.CultureInfo.CurrentCulture.ToString());
-                re.Evaluate($"fit=arima(y, c({_q},{_d},{_p}), method=\"ML\")");
-                _log.Debug($"fit=arima(y, c({_q},{_d},{_p}), method=\"ML\")");
+                re.Evaluate($"fit=arima(y, c({_p},{_d},{_q}), method=\"ML\")");
+                _log.Debug($"fit=arima(y, c({_p},{_d},{_q}), method=\"ML\")");
                 var resp = re.Evaluate($"f <- forecast(fit, h={forecast})");
                 var r = resp.AsList();
                 _log.Info($"Valor predito: {r[3].AsNumeric()[forecast - 1]}");
